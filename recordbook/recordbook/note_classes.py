@@ -108,20 +108,19 @@ class NoteBook(UserDict):
     
 
 nb = NoteBook()
+file_name = "n_book.json"
+print(nb.load_data(file_name))
 print(nb) 
 key=datetime.now()
-note = Note('Мy new note')
-rec = NoteRecord(key, note, Tag('Note'))
+note = Note('Create tag sorting')
+rec = NoteRecord(key, note, Tag('Project'))
 nb.add_record(rec)
 
 key=datetime.now()
-note = Note('Мy second note. ')
-rec = NoteRecord(key, note, Tag('Note'))
+note = Note('Ще одна нотатка. Ні до чого')
+rec = NoteRecord(key, note, Tag('Нотатка'))
 nb.add_record(rec)
 
-
-file_name = "n_book.json"
-print(nb.save_data(file_name))
-print(nb.load_data(file_name))
 print(nb.find_note('second'))
+print(nb.save_data(file_name))
 print(nb)
