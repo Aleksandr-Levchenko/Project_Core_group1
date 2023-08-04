@@ -106,21 +106,22 @@ class NoteBook(UserDict):
             result = f"No records was found for the fragment '{fragment}' \n"
         return result
     
+if __name__ == "__main__":
 
-nb = NoteBook()
-file_name = "n_book.json"
-print(nb.load_data(file_name))
-print(nb) 
-key=datetime.now()
-note = Note('Create tag sorting')
-rec = NoteRecord(key, note, Tag('Project'))
-nb.add_record(rec)
+    nb = NoteBook()
+    file_name = "n_book.json"
+    print(nb.load_data(file_name))
+    print(nb) 
+    key=datetime.now()
+    note = Note('Create tag sorting')
+    rec = NoteRecord(key, note, Tag('Project'))
+    nb.add_record(rec)
 
-key=datetime.now()
-note = Note('Ще одна нотатка. Ні до чого')
-rec = NoteRecord(key, note, Tag('Нотатка'))
-nb.add_record(rec)
+    key=datetime.now()
+    note = Note('Ще одна нотатка. Ні до чого')
+    rec = NoteRecord(key, note, Tag('Нотатка'))
+    nb.add_record(rec)
 
-print(nb.find_note('second'))
-print(nb.save_data(file_name))
-print(nb)
+    print(nb.find_note('second'))
+    print(nb.save_data(file_name))
+    print(nb)
