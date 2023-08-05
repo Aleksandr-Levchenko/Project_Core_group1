@@ -25,9 +25,9 @@ class Tag:
 class Note(Tag):
     pass
 
-class NoteRecord():
-    def __init__(self, key: datetime, note: Note=None, tag: Tag=None):
-        self.key = datetime.now()
+class NoteRecord():    
+    def __init__(self, key = datetime.now().replace(microsecond=0).timestamp(), note: Note=None, tag: Tag=None):        
+        self.key = key
         self.note = note
         self.tag = tag
 
@@ -67,29 +67,28 @@ class NoteBook(UserDict):
 
     def save_data(self, filename):
         with open(filename, 'w') as f:
-            json.dump({str(record.key): (str(record.note) if record.note else "", (str(record.tag) if record.tag else "")) for key, record in self.items()}, f)
+
+            json.dump({str(record.key): (str(record.note  if record.note else ""), str(record.tag if record.tag else "")) for key, record in self.items()}, f, indent=4)
+
         return f"The note_book is saved."
 
     def load_data(self, filename):
         try:
             with open(filename, 'r') as f:
                 data_dict = json.load(f)
-                for key, value in data_dict.items():
-                    
-                    note, tag = value[:-1], value[-1]
-
-                    if tag:
-                        record = NoteRecord(key, Note(note), Tag(tag))
-                    else:
-                        record = NoteRecord(key, Note(note))
+                for key, value in data_dict.items():                    
+                    note, tag = value
+                    note = Note(note)
+                    tag = Tag(tag)
+                    record = NoteRecord(key, note, tag)
                     self.data[record.key] = record
 
             if isinstance(self.data, dict):
                 print(f"The note_book is loaded.")
             else:
                 print("The file does not contain a valid note_book.")
-        except FileNotFoundError as e:
-            print(f"{e}")
+        except FileNotFoundError:
+            print(f"The file {filename} does not exist")
 
 
     def find_note(self, fragment:str):
@@ -112,16 +111,26 @@ if __name__ == "__main__":
     file_name = "n_book.json"
     print(nb.load_data(file_name))
     print(nb) 
-    key=datetime.now()
+
+    key=datetime.now().replace(microsecond=0).timestamp()
     note = Note('Create tag sorting')
     rec = NoteRecord(key, note, Tag('Project'))
     nb.add_record(rec)
 
-    key=datetime.now()
-    note = Note('Ще одна нотатка. Ні до чого')
-    rec = NoteRecord(key, note, Tag('Нотатка'))
+    input("press enter")
+    
+    key=datetime.now().replace(microsecond=0).timestamp()
+    note = Note('One more note. Nothing to do with it')
+    rec = NoteRecord(key, note, Tag('Note'))
     nb.add_record(rec)
 
-    print(nb.find_note('second'))
+    input("press enter")
+    
+    key=datetime.now().replace(microsecond=0).timestamp()
+    note = Note('')
+    rec = NoteRecord(key, note, Tag(''))
+    nb.add_record(rec)
+
+    print(nb.find_note('note'))
     print(nb.save_data(file_name))
     print(nb)
