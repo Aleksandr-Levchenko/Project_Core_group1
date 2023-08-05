@@ -13,6 +13,7 @@ from RecordBook import AddressBook, Record, Name, Phone, Field, Birthday, PhoneE
 import re
 import datetime
 import clean
+import exchangerate
 
 from rich import print
 from rich import box
@@ -159,7 +160,7 @@ def run_handler(handler, cmd, prm):
         result = handler("")
     elif cmd in ["save", "load"]:
         result = handler(path)            
-    elif cmd in ["show all", "hello", "cls", "help"]:
+    elif cmd in ["show all", "hello", "cls", "help", "currency"]:
         result = handler("")
     return result
      
@@ -531,7 +532,14 @@ def func_help(_):
       example >> [bold blue]search Mike[/bold blue]
 [bold red]sort[/bold red] - виконує сортування файлів в указаній папці
       example >> [bold blue]sort folder_name[/bold blue]
+[bold red]currency[/bold red] - отримує курс валют USD та EUR з ПриватБанку
+      example >> [bold blue]currency[/bold blue]
 """
+# =========================================================
+# Функція отримує поточний курс валют
+# =========================================================
+def func_currency(_):
+    return exchangerate.get_currency()
     
 
 def clear_screen(_):
@@ -555,7 +563,7 @@ def get_count_prm(prm: list):
 COMMANDS = ["good bye", "close", "exit",
             "hello", "add", "phone", "show all", "save", "load", 
             "cls", "add phone", "del phone", "change phone", "show book",
-            "change birthday", "birthday", "help", "search","sort"]
+            "change birthday", "birthday", "help", "search","sort", "currency"]
 
 OPERATIONS = {"good bye": func_exit, "close": func_exit, "exit": func_exit,
               "hello": func_greeting, 
@@ -573,7 +581,8 @@ OPERATIONS = {"good bye": func_exit, "close": func_exit, "exit": func_exit,
               "birthday": func_get_day_birthday,
               "help": func_help,
               "search": func_search,
-              "sort": func_sort}
+              "sort": func_sort,
+              "currency": func_currency}
 
 if __name__ == "__main__":
     main()
