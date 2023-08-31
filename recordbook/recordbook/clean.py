@@ -141,7 +141,7 @@ def move_file(file: Path, root_dir: Path, categorie: str) -> None:
     global dict_search_result
     target_dir = root_dir.joinpath(categorie)
     if not target_dir.exists():
-        print(f"Створюємо {target_dir}")
+        print(f"Creation {target_dir}")
         target_dir.mkdir()
 
     if file.suffix.lower() in (".zip", ".tar", ".gz"):
@@ -181,24 +181,35 @@ def sort_folder(path: Path) -> None:
             move_file(item, path, cat)
 
 
+def save_log(list):
+    with open("Sort_Log.txt", "w") as file:
+        for item in list:
+            items = item.split(", ")
+            for element in items:
+                file.write(f"{element}\n")
+
+
+
 def main(argv):
     try:
         path = Path(argv)
         # path = Path(sys.argv[1])
         # path = Path("C:\\Testfolder")
-        print(f"Папка для сортування ", {path})
+        print(f"Folder for sorting ", {path})
     except IndexError:
-        return "Не вказана папка для сортування"
+        return "No folder specified for sorting"
 
     if not path.exists():
-        return f"Папка з таким шляхом {path} не існує."
+        return f"This {path} does not exist."
 
     sort_folder(path)
     delete_empty_folders(path)
     delete_arch_files(path)
-    file_list()
+    # file_list()
+    save_log(file_list())
 
-    return "Программа завершила роботу."
+
+    return f"The folder {path} is sorted."
 
 
 if __name__ == "__main__":
